@@ -1,0 +1,53 @@
+# Gym Membership Management System
+
+application for managing gym memberships, including gyms, membership plans
+and members.
+
+## stack
+
+- Java 21
+- Spring Boot 4
+- Spring Data JPA
+- H2
+- Maven
+
+## build and run
+Requires JDK 21
+```
+./mvnw spring-boot:run
+```
+
+On Windows
+```
+mvnw.cmd spring-boot:run
+```
+starts on `http://localhost:8080`. The database is in-memory,
+so all data is reset on every restart.
+
+H2 console is available at `http://localhost:8080/h2-console`
+(JDBC URL: `jdbc:h2:mem:gymdb`, user: `sa`, empty password).
+
+## API
+
+### create a gym
+
+`POST /api/gyms`
+
+```json
+{
+  "name": "Gym",
+  "address": "street city",
+  "phoneNumber": "+48 123 456 789"
+}
+```
+
+responses:
+- `201 Created` with the created gym
+- `400 Bad Request` any field blank
+- `409 Conflict` gym with the same name already exists
+
+### list all gyms
+
+`GET /api/gyms`
+
+returns `200 OK` with an array of gyms (empty array if none exist).
