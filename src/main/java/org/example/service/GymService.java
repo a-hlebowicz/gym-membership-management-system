@@ -7,6 +7,8 @@ import org.example.model.Gym;
 import org.example.repository.GymRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class GymService {
@@ -25,5 +27,9 @@ public class GymService {
         gym.setPhoneNumber(request.getPhoneNumber());
 
         return gymRepository.save(gym);
+    }
+
+    public List<Gym> listGyms(){
+        return gymRepository.findAll();
     }
 }
