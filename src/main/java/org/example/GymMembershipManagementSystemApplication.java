@@ -1,4 +1,4 @@
-package org.example.gym_membership_management_system;
+package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
