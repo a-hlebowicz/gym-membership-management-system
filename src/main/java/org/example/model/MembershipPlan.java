@@ -33,4 +33,8 @@ public class MembershipPlan {
     @Column(nullable = false)
     private int maxMembers;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "gym_id", nullable = false)
+    private Gym gym;
+
 }
