@@ -51,3 +51,32 @@ responses:
 `GET /api/gyms`
 
 returns `200 OK` with an array of gyms (empty array if none exist).
+
+### create a plan
+
+`POST /api/gyms/{gymId}/plans`
+
+type is one of `BASIC`, `PREMIUM`, `GROUP`.
+
+```json
+{
+  "name": "Plan",
+  "type": "PREMIUM",
+  "amount": 100.99,
+  "currency": "PLN",
+  "durationMonths": 1,
+  "maxMembers": 5
+}
+```
+
+responses:
+- `201 Created` with the created plan
+- `400 Bad Request` invalid or missing fields
+- `404 Not Found` gym does not exist
+
+### list plans of a gym
+
+`GET /api/gyms/{gymId}/plans`
+
+returns `200 OK` with an array of plans (empty array if the gym has none),
+or `404 Not Found` if the gym does not exist.
