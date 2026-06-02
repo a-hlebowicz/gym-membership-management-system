@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Gym {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -21,8 +22,19 @@ public class Gym {
     private String name;
 
     @Column(nullable = false)
-    private String address;
+    private String surname;
 
     @Column(nullable = false)
-    private String phoneNumber;
+    private String email;
+
+    @Column(nullable = false)
+    private LocalDate startDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private MemberStatus status;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "plan_id", nullable = false)
+    private MembershipPlan plan;
 }
