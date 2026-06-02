@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,5 +26,10 @@ public class PlanController {
         return ResponseEntity.status(HttpStatus.CREATED).body(PlanResponse.from(plan));
     }
 
+    @GetMapping
+    public ResponseEntity<List<PlanResponse>> listPlans(@PathVariable UUID gymId){
+        List<PlanResponse> plans = planService.listPlansForGym(gymId).stream().map(PlanResponse::from).toList();
+        return ResponseEntity.ok(plans);
+    }
 
 }

@@ -10,6 +10,7 @@ import org.example.repository.GymRepository;
 import org.example.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -33,4 +34,10 @@ public class PlanService {
         return planRepository.save(plan);
     }
 
+    public List<MembershipPlan> listPlansForGym(UUID gymId) {
+        if (!gymRepository.existsById(gymId)) {
+            throw new NotFoundException("Gym " + gymId + " not found");
+        }
+        return planRepository.findByGymId(gymId);
+    }
 }
