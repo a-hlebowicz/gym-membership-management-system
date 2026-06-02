@@ -14,4 +14,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String >> handleConflict(ConflictException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", exception.getMessage()));
     }
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Map<String, String >> handleNotFound(NotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", exception.getMessage()));
+    }
 }
