@@ -12,6 +12,7 @@ import org.example.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -38,6 +39,19 @@ public class MemberService {
         member.setStatus(MemberStatus.ACTIVE);
         member.setPlan(plan);
 
+        return memberRepository.save(member);
+    }
+
+    public List<Member> listMembers() { return memberRepository.findAll(); }
+
+    public Member cancelMembership(UUID memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException("Member " + memberId + " not found"));
+
+        if (member.getStatus() == MemberStatus.CANCELLED) {
+            throw new ConflictException("Member " + memberId + " already cancelled");
+        }
+
+        member.setStatus(MemberStatus.CANCELLED);
         return memberRepository.save(member);
     }
 }
