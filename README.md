@@ -129,5 +129,5 @@ membership.
 
 ## notes
 
-Member registration locks the plan row (`SELECT ... FOR UPDATE` within a transaction),
-so another registrations in the same time cannot exceed `maxMembers`.
+Member create locks the plan row (`SELECT ... FOR UPDATE` within a transaction),
+so another create in the same time cannot exceed `maxMembers`.
