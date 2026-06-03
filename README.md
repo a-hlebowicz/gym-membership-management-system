@@ -113,3 +113,16 @@ responses:
 - `200 OK` with the member (status `CANCELLED`)
 - `404 Not Found` member does not exist
 - `409 Conflict` member is already cancelled
+
+
+## tests
+
+Run the tests with:
+
+```
+mvnw test
+```
+
+Integration tests (`@SpringBootTest` with MockMvcTester) tests the main flow and the key
+rules: plan capacity (409 when full), duplicate gym name (409), and cancelling a
+membership.

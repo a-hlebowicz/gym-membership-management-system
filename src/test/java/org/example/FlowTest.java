@@ -1,7 +1,6 @@
 package org.example;
 
 import com.jayway.jsonpath.JsonPath;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 
@@ -61,9 +61,31 @@ public class FlowTest {
         createMember(planId, "Aleksander", "Hlebowicz", "aleksanderhlebowicz@gmail.com");
 
         assertThat(mockMvc.post().uri("/api/plans/{id}/members", planId).contentType(MediaType.APPLICATION_JSON).content("""
-                    { "name": "Aleksander", "surname": "Hlebowicz", "email": "aleksanderhlebowicz@gmail.com" }
+                    { "name": "Paweł", "surname": "Hlebowicz", "email": "pawelhlebowicz@gmail.com" }
                     """)).hasStatus(HttpStatus.CONFLICT);
 
+    }
+
+    @Test
+    void cancelMembership_freesSlot() throws UnsupportedEncodingException {
+
+        String gymId = createGym("Gym", "street 10", "+48 123 345 567");
+        String planId = createPlan(gymId, "Plan1", "PREMIUM", "100.99", "PLN", 1, 1);
+        String memberId = createMember(planId, "Aleksander", "Hlebowicz", "aleksanderhlebowicz@gmail.com");
+
+        assertThat(mockMvc.post().uri("/api/plans/{id}/members", planId).contentType(MediaType.APPLICATION_JSON).content("""
+                    { "name": "Paweł", "surname": "Hlebowicz", "email": "pawelhlebowicz@gmail.com" }
+                    """)).hasStatus(HttpStatus.CONFLICT);
+
+        assertThat(mockMvc.post().uri("/api/members/{id}/cancel", memberId))
+                .hasStatusOk();
+
+        assertThat(mockMvc.post().uri("/api/plans/{id}/members", planId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    { "name": "Paweł", "surname": "Hlebowicz", "email": "pawelhlebowicz@gmail.com" }
+                    """))
+                .hasStatus(HttpStatus.CREATED);
     }
 
 
