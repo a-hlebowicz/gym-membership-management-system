@@ -1,6 +1,7 @@
 package org.example;
 
 import com.jayway.jsonpath.JsonPath;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class FlowTest {
 
     @Autowired
@@ -40,6 +42,35 @@ public class FlowTest {
                 ]
                 """);
     }
+
+    @Test
+    void createGym_duplicateName() throws UnsupportedEncodingException {
+
+        createGym("Gym", "street 10", "+48 123 345 567");
+
+        assertThat(mockMvc.post().uri("/api/gyms").contentType(MediaType.APPLICATION_JSON).content("""
+                    { "name": "Gym", "address": "astreet 11", "phoneNumber": "+48 987 765 543" }
+                    """)).hasStatus(HttpStatus.CONFLICT);
+    }
+
+    @Test
+    void createMember_planFull() throws UnsupportedEncodingException {
+
+        String gymId = createGym("Gym", "street 10", "+48 123 345 567");
+        String planId = createPlan(gymId, "Plan1", "PREMIUM", "100.99", "PLN", 1, 1);
+        createMember(planId, "Aleksander", "Hlebowicz", "aleksanderhlebowicz@gmail.com");
+
+        assertThat(mockMvc.post().uri("/api/plans/{id}/members", planId).contentType(MediaType.APPLICATION_JSON).content("""
+                    { "name": "Aleksander", "surname": "Hlebowicz", "email": "aleksanderhlebowicz@gmail.com" }
+                    """)).hasStatus(HttpStatus.CONFLICT);
+
+    }
+
+
+
+
+
+
 
     private String createGym(String name, String address, String phone) throws UnsupportedEncodingException {
 
