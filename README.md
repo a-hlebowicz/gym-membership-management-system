@@ -80,3 +80,36 @@ responses:
 
 returns `200 OK` with an array of plans (empty array if the gym has none),
 or `404 Not Found` if the gym does not exist.
+
+### register a member
+
+`POST /api/plans/{planId}/members`
+
+```json
+{
+  "name": "Aleksander",
+  "surname": "Hlebowicz",
+  "email": "aleksanderhlebowicz@gmail.com"
+}
+```
+
+responses:
+- `201 Created` with the created member
+- `400 Bad Request` invalid or missing fields
+- `404 Not Found` plan does not exist
+- `409 Conflict` plan is full (active members reached maxMembers)
+
+### list all members
+
+`GET /api/members`
+
+returns `200 OK` with an array of all members, with plan name, gym name and status.
+
+### cancel a membership
+
+`POST /api/members/{id}/cancel`
+
+responses:
+- `200 OK` with the member (status `CANCELLED`)
+- `404 Not Found` member does not exist
+- `409 Conflict` member is already cancelled
