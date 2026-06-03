@@ -10,6 +10,7 @@ import org.example.model.MembershipPlan;
 import org.example.repository.MemberRepository;
 import org.example.repository.PlanRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,10 +23,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PlanRepository planRepository;
 
+    @Transactional
     public Member createMember(UUID planId, CreateMemberRequest request) {
-        MembershipPlan plan = planRepository.findById(planId).orElseThrow(() -> new NotFoundException("Membershiip plan " + planId + " not found"));
 
-        //TODO possible race when more requests
+        MembershipPlan plan = planRepository.findByIdLocked(planId).orElseThrow(() -> new NotFoundException("Membershiip plan " + planId + " not found"));
+
         long activeMembers = memberRepository.countByPlanIdAndStatus(planId, MemberStatus.ACTIVE);
         if (activeMembers >= plan.getMaxMembers()) {
             throw new ConflictException("Plan " + planId + " is full [max " + plan.getMaxMembers() + "]");

@@ -126,3 +126,8 @@ mvnw test
 Integration tests (`@SpringBootTest` with MockMvcTester) tests the main flow and the key
 rules: plan capacity (409 when full), duplicate gym name (409), and cancelling a
 membership.
+
+## notes
+
+Member registration locks the plan row (`SELECT ... FOR UPDATE` within a transaction),
+so another registrations in the same time cannot exceed `maxMembers`.
