@@ -115,17 +115,35 @@ responses:
 - `409 Conflict` member is already cancelled
 
 
+### revenue report
+
+`GET /api/reports/revenue`
+
+total monthly revenue per gym, grouped by currency. revenue is the sum of the monthly
+prices of all `ACTIVE` members
+
+returns `200 OK` with an array of rows (empty array if there are no active members):
+
+```json
+[
+  { "gymName": "FitLife Center", "amount": 2048.00, "currency": "EUR" },
+  { "gymName": "FitLife Center", "amount": 512.64, "currency": "GBP" },
+  { "gymName": "Iron Gym", "amount": 1024.00, "currency": "PLN" }
+]
+```
+
+
 ## tests
 
 Run the tests with:
 
 ```
-mvnw test
+./mvnw test
 ```
 
 Integration tests (`@SpringBootTest` with MockMvcTester) tests the main flow and the key
-rules: plan capacity (409 when full), duplicate gym name (409), and cancelling a
-membership.
+rules: plan capacity (409 when full), duplicate gym name (409), cancelling a
+membership, and the revenue report.
 
 ## notes
 

@@ -44,6 +44,33 @@ public class FlowTest {
     }
 
     @Test
+    void revenueReportTest() throws UnsupportedEncodingException {
+
+        String fitLife = createGym("FitLife Center", "street 1", "+48 111 111 111");
+        String ironGym = createGym("Iron Gym", "street 2", "+48 222 222 222");
+
+        String eur = createPlan(fitLife, "EUR", "PREMIUM", "2048.00", "EUR", 1, 10);
+        String gbp = createPlan(fitLife, "GBP", "PREMIUM", "512.64", "GBP", 1, 10);
+        String pln = createPlan(ironGym, "PLN", "BASIC", "1024.00", "PLN", 1, 9);
+
+        createMember(eur, "Aleksander", "Hlebowicz", "aleksanderhlebowicz@gmail.com");
+        createMember(gbp, "Paweł", "Hlebowicz", "pawelhlebowicz@gmail.com");
+        createMember(pln, "test", "test", "tset@test.com");
+
+        MvcTestResult result = mockMvc.get().uri("/api/reports/revenue").exchange();
+
+        System.out.println(result.getResponse().getContentAsString());
+
+        assertThat(result).hasStatusOk().bodyJson().isLenientlyEqualTo("""
+            [
+                { "gymName": "FitLife Center", "amount": 2048.00, "currency": "EUR" },
+                { "gymName": "FitLife Center", "amount": 512.64, "currency": "GBP" },
+                { "gymName": "Iron Gym", "amount": 1024.00, "currency": "PLN" }
+            ]
+            """);
+    }
+
+    @Test
     void createGym_duplicateName() throws UnsupportedEncodingException {
 
         createGym("Gym", "street 10", "+48 123 345 567");
