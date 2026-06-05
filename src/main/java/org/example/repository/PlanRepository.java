@@ -18,5 +18,5 @@ public interface PlanRepository extends JpaRepository<MembershipPlan, UUID> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from MembershipPlan p where p.id = :id")
-    Optional<MembershipPlan> findByIdLocked(@Param("id") UUID gymId);
+    Optional<MembershipPlan> findByIdLocked(@Param("id") UUID Id);
 }

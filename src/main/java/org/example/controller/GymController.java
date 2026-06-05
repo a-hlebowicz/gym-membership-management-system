@@ -27,7 +27,7 @@ public class GymController {
 
     @GetMapping
     public ResponseEntity<List<GymResponse>> listGyms(){
-        List<GymResponse> gyms =gymService.listGyms().stream().map(GymResponse::from).toList();  //get list<gym>; do GymResponse.from(gym) for every gym; and give list<GymResponse>
+        List<GymResponse> gyms =gymService.listGyms().stream().map(GymResponse::from).toList();
         return ResponseEntity.ok(gyms);
     }
 }

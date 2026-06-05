@@ -26,7 +26,7 @@ public class MemberService {
     @Transactional
     public Member createMember(UUID planId, CreateMemberRequest request) {
 
-        MembershipPlan plan = planRepository.findByIdLocked(planId).orElseThrow(() -> new NotFoundException("Membershiip plan " + planId + " not found"));
+        MembershipPlan plan = planRepository.findByIdLocked(planId).orElseThrow(() -> new NotFoundException("Membership plan " + planId + " not found"));
 
         long activeMembers = memberRepository.countByPlanIdAndStatus(planId, MemberStatus.ACTIVE);
         if (activeMembers >= plan.getMaxMembers()) {

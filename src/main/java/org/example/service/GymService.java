@@ -18,7 +18,7 @@ public class GymService {
     public Gym createGym(CreateGymRequest request){
 
         if(gymRepository.existsByName(request.getName())){
-            throw new ConflictException("Gym " + request.getName() + "already exists");
+            throw new ConflictException("Gym " + request.getName() + " already exists");
         }
 
         Gym gym = new Gym();

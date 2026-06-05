@@ -20,6 +20,6 @@ public class CreateMemberRequest {
     private String surname;
 
     @NotBlank
-    //@Email //TODO easier tests; remove // later
+    @Email
     private String email;
 }
